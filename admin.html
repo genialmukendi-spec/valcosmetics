@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="icon" href="logo.jpeg"/>
+<title>VAL Admin | Luxury Back-office</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300; }
+  .input-underline { border-bottom: 1px solid #d1c5b2; background: transparent; }
+  .input-underline:focus { outline: none; border-color: #795902; }
+</style>
+<script id="tailwind-config">
+  tailwind.config = {
+    theme: { extend: {
+      colors: { background:"#fff8f2", primary:"#795902", "primary-container":"#c9a24b", "on-surface":"#1f1b15", "on-surface-variant":"#4e4637", "surface-container-low":"#fbf2e8", "inverse-surface":"#343029", "inverse-on-surface":"#f8efe5", "outline-variant":"#d1c5b2", error:"#ba1a1a" },
+      fontFamily: { "display-lg":["Playfair Display"], button:["Montserrat"], "body-md":["Montserrat"] },
+      fontSize: { button:["14px",{lineHeight:"1",letterSpacing:"0.15em",fontWeight:"500"}] }
+    }}
+  }
+</script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+
+<!-- Écran de connexion -->
+<section id="login-screen" class="min-h-screen flex items-center justify-center px-6">
+  <div class="w-full max-w-sm">
+    <div class="text-center mb-10">
+      <span class="font-display-lg text-2xl text-primary tracking-widest">VAL Admin</span>
+      <p class="text-xs uppercase tracking-widest text-on-surface-variant mt-2">Luxury Back-office</p>
+    </div>
+    <form id="login-form" class="flex flex-col gap-6">
+      <div>
+        <label class="text-xs uppercase tracking-widest text-on-surface-variant">Email</label>
+        <input id="login-email" type="email" required class="w-full input-underline py-2"/>
+      </div>
+      <div>
+        <label class="text-xs uppercase tracking-widest text-on-surface-variant">Mot de passe</label>
+        <input id="login-password" type="password" required class="w-full input-underline py-2"/>
+      </div>
+      <p id="login-error" class="text-error text-sm hidden"></p>
+      <button type="submit" class="bg-primary text-white font-button text-button uppercase py-4 tracking-[0.15em] hover:opacity-90 transition-opacity">Se connecter</button>
+    </form>
+  </div>
+</section>
+
+<!-- Back-office -->
+<div id="admin-app" class="hidden md:flex min-h-screen">
+  <aside class="w-64 bg-surface-container-low border-r border-outline-variant p-6 hidden md:flex flex-col justify-between">
+    <div>
+      <span class="font-display-lg text-xl text-primary tracking-widest">VAL Admin</span>
+      <p class="text-xs text-on-surface-variant mb-10">Luxury Back-office</p>
+      <nav class="flex flex-col gap-1">
+        <button data-tab="publish" class="tab-btn flex items-center gap-3 px-4 py-3 bg-primary text-white text-sm">Publier un produit</button>
+        <button data-tab="products" class="tab-btn flex items-center gap-3 px-4 py-3 text-sm hover:bg-primary/10">Gérer les produits</button>
+        <button data-tab="comments" class="tab-btn flex items-center gap-3 px-4 py-3 text-sm hover:bg-primary/10">Modérer les commentaires</button>
+      </nav>
+    </div>
+    <button id="logout-btn" class="text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary text-left">Se déconnecter</button>
+  </aside>
+
+  <main class="flex-1 p-6 md:p-12">
+    <div class="flex justify-between items-center mb-10">
+      <div>
+        <h1 class="font-display-lg text-2xl md:text-3xl" id="page-title">Publier un produit</h1>
+        <p class="text-sm text-on-surface-variant" id="page-subtitle">Publiez une photo produit avec sa légende.</p>
+      </div>
+      <a href="produits.html" target="_blank" class="border border-primary text-primary text-xs uppercase tracking-widest px-6 py-3 hover:bg-primary hover:text-white transition-colors">Aperçu boutique</a>
+    </div>
+
+    <!-- Onglet: publier -->
+    <section id="tab-publish" class="tab-panel">
+      <form id="publish-form" class="grid md:grid-cols-2 gap-12 bg-white p-8 md:p-10 border border-outline-variant max-w-4xl">
+        <div>
+          <label class="text-xs uppercase tracking-widest text-on-surface-variant block mb-3">Visuel produit</label>
+          <label class="relative flex flex-col items-center justify-center border border-dashed border-outline-variant aspect-square cursor-pointer overflow-hidden bg-surface-container-low">
+            <img id="image-preview" class="hidden absolute inset-0 w-full h-full object-cover"/>
+            <div id="image-placeholder" class="flex flex-col items-center gap-2 text-on-surface-variant">
+              <span class="material-symbols-outlined text-3xl">add_a_photo</span>
+              <span class="text-sm">Glisser ou cliquer pour uploader</span>
+            </div>
+            <input id="image-input" type="file" accept="image/*" required class="absolute inset-0 opacity-0 cursor-pointer"/>
+          </label>
+          <p class="text-xs italic text-on-surface-variant mt-3">Recommandé : format portrait ou carré, fond minimaliste (crème ou neutre).</p>
+        </div>
+        <div class="flex flex-col gap-6">
+          <div>
+            <label class="text-xs uppercase tracking-widest text-on-surface-variant">Nom du produit</label>
+            <input id="product-title" required placeholder="ex: L'Élixir Doré" class="w-full input-underline py-2"/>
+          </div>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <label class="text-xs uppercase tracking-widest text-on-surface-variant">Catégorie</label>
+              <select id="product-category" class="w-full input-underline py-2 bg-transparent">
+                <option value="soins-visage">Lotion</option>
+                <option value="maquillage">Serum</option>
+                <option value="parfums">Autres</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs uppercase tracking-widest text-on-surface-variant">Prix (USD)</label>
+              <input id="product-price" type="number" step="0.01" min="0" placeholder="120.00" class="w-full input-underline py-2"/>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs uppercase tracking-widest text-on-surface-variant">Légende & description</label>
+            <textarea id="product-description" rows="4" placeholder="Décrivez l'expérience sensorielle…" class="w-full input-underline py-2 resize-none"></textarea>
+          </div>
+          <p id="publish-error" class="text-error text-sm hidden"></p>
+          <p id="publish-success" class="text-primary text-sm hidden">Produit publié avec succès ✨</p>
+          <button type="submit" id="publish-submit" class="w-full bg-inverse-surface text-white font-button text-button uppercase py-5 tracking-[0.2em] hover:bg-primary transition-all">Publier l'article</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Onglet: gérer -->
+    <section id="tab-products" class="tab-panel hidden">
+      <div class="grid gap-4 max-w-4xl" id="admin-products-list">
+        <p class="text-on-surface-variant">Chargement…</p>
+      </div>
+    </section>
+
+    <!-- Onglet: commentaires -->
+    <section id="tab-comments" class="tab-panel hidden">
+      <div class="grid gap-4 max-w-4xl" id="admin-comments-list">
+        <p class="text-on-surface-variant">Chargement…</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="supabase-client.js"></script>
+<script src="admin.js"></script>
+<script>
+  const loginScreen = document.getElementById('login-screen');
+  const adminApp = document.getElementById('admin-app');
+
+  async function checkSession() {
+    const isAdmin = await isCurrentUserAdmin();
+    if (isAdmin) {
+      loginScreen.classList.add('hidden');
+      adminApp.classList.remove('hidden');
+      adminApp.classList.add('md:flex');
+      loadProducts();
+      loadComments();
+    } else {
+      loginScreen.classList.remove('hidden');
+      adminApp.classList.add('hidden');
+    }
+  }
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const errorEl = document.getElementById('login-error');
+    errorEl.classList.add('hidden');
+    const result = await adminSignIn(email, password);
+    if (!result.ok) {
+      errorEl.textContent = result.message;
+      errorEl.classList.remove('hidden');
+      return;
+    }
+    checkSession();
+  });
+
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    await adminSignOut();
+    checkSession();
+  });
+
+  // Onglets
+  const titles = {
+    publish: ['Publier un produit', 'Publiez une photo produit avec sa légende.'],
+    products: ['Gestion des produits', 'Publiez et modérez vos dernières collections cosmétiques.'],
+    comments: ['Modération des commentaires', 'Consultez et supprimez les commentaires des visiteurs.'],
+  };
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('bg-primary', 'text-white'));
+      btn.classList.add('bg-primary', 'text-white');
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
+      document.getElementById('page-title').textContent = titles[btn.dataset.tab][0];
+      document.getElementById('page-subtitle').textContent = titles[btn.dataset.tab][1];
+      if (btn.dataset.tab === 'products') loadProducts();
+      if (btn.dataset.tab === 'comments') loadComments();
+    });
+  });
+
+  // Prévisualisation image
+  let selectedFile = null;
+  document.getElementById('image-input').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    selectedFile = file;
+    const preview = document.getElementById('image-preview');
+    preview.src = URL.createObjectURL(file);
+    preview.classList.remove('hidden');
+    document.getElementById('image-placeholder').classList.add('hidden');
+  });
+
+  // Publication
+  document.getElementById('publish-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById('publish-submit');
+    const errorEl = document.getElementById('publish-error');
+    const successEl = document.getElementById('publish-success');
+    errorEl.classList.add('hidden');
+    successEl.classList.add('hidden');
+
+    if (!selectedFile) {
+      errorEl.textContent = 'Merci de sélectionner une image.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Publication en cours…';
+
+    try {
+      const imageUrl = await uploadProductImage(selectedFile);
+      if (!imageUrl) {
+        errorEl.textContent = "Erreur lors de l'upload de l'image. Vérifie ta connexion et que tu es bien connecté(e) en admin.";
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      const result = await createProduct({
+        title: document.getElementById('product-title').value.trim(),
+        description: document.getElementById('product-description').value.trim(),
+        price: document.getElementById('product-price').value || null,
+        category: document.getElementById('product-category').value,
+        imageUrl,
+      });
+
+      if (!result.ok) {
+        errorEl.textContent = result.message;
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      successEl.classList.remove('hidden');
+      document.getElementById('publish-form').reset();
+      document.getElementById('image-preview').classList.add('hidden');
+      document.getElementById('image-placeholder').classList.remove('hidden');
+      selectedFile = null;
+    } catch (err) {
+      console.error('Erreur inattendue lors de la publication:', err);
+      errorEl.textContent = "Une erreur inattendue s'est produite : " + (err && err.message ? err.message : err);
+      errorEl.classList.remove('hidden');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Publier l'article";
+    }
+  });
+
+  // Liste produits admin
+  async function loadProducts() {
+    const list = document.getElementById('admin-products-list');
+    list.innerHTML = '<p class="text-on-surface-variant">Chargement…</p>';
+    const products = await fetchAllProductsAdmin();
+    if (!products.length) {
+      list.innerHTML = '<p class="text-on-surface-variant">Aucun produit publié pour le moment.</p>';
+      return;
+    }
+    list.innerHTML = products.map(p => `
+      <div class="flex items-center gap-4 bg-white border border-outline-variant p-4">
+        <img src="${p.image_url}" class="w-16 h-16 object-cover"/>
+        <div class="flex-1">
+          <p class="font-medium">${p.title}</p>
+          <p class="text-xs text-on-surface-variant">${p.category} · ${p.likes_count} ❤ · ${p.comments_count} 💬 ${p.is_published ? '' : '· <span class=\'text-error\'>Masqué</span>'}</p>
+        </div>
+        <button data-id="${p.id}" data-published="${p.is_published}" class="toggle-publish text-xs uppercase tracking-wider border border-primary text-primary px-3 py-2 hover:bg-primary hover:text-white transition-colors">
+          ${p.is_published ? 'Masquer' : 'Publier'}
+        </button>
+        <button data-id="${p.id}" class="delete-product text-xs uppercase tracking-wider border border-error text-error px-3 py-2 hover:bg-error hover:text-white transition-colors">Supprimer</button>
+      </div>
+    `).join('');
+
+    list.querySelectorAll('.toggle-publish').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const nowPublished = btn.dataset.published !== 'true';
+        await toggleProductPublished(btn.dataset.id, nowPublished);
+        loadProducts();
+      });
+    });
+    list.querySelectorAll('.delete-product').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Supprimer définitivement ce produit ?')) return;
+        await deleteProduct(btn.dataset.id);
+        loadProducts();
+      });
+    });
+  }
+
+  // Modération commentaires
+  async function loadComments() {
+    const list = document.getElementById('admin-comments-list');
+    list.innerHTML = '<p class="text-on-surface-variant">Chargement…</p>';
+    const comments = await fetchAllCommentsAdmin();
+    if (!comments.length) {
+      list.innerHTML = '<p class="text-on-surface-variant">Aucun commentaire pour le moment.</p>';
+      return;
+    }
+    list.innerHTML = comments.map(c => `
+      <div class="flex items-start justify-between gap-4 bg-white border border-outline-variant p-4">
+        <div>
+          <p class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">${c.products ? c.products.title : ''}</p>
+          <p class="font-medium text-sm">${c.author_name}</p>
+          <p class="text-sm text-on-surface-variant">${c.content}</p>
+        </div>
+        <button data-id="${c.id}" class="delete-comment text-xs uppercase tracking-wider border border-error text-error px-3 py-2 hover:bg-error hover:text-white transition-colors whitespace-nowrap">Supprimer</button>
+      </div>
+    `).join('');
+
+    list.querySelectorAll('.delete-comment').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Supprimer ce commentaire ?')) return;
+        await deleteCommentAdmin(btn.dataset.id);
+        loadComments();
+      });
+    });
+  }
+
+  checkSession();
+</script>
+</body>
+</html>

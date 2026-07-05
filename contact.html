@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="icon" href="logo.jpeg"/>
+<title>Contact | VAL Cosmetics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300; }</style>
+<script id="tailwind-config">
+  tailwind.config = {
+    theme: { extend: {
+      colors: { background:"#fff8f2", primary:"#795902", "primary-container":"#c9a24b", "on-surface":"#1f1b15", "on-surface-variant":"#4e4637", "surface-container-low":"#fbf2e8", "inverse-surface":"#343029", "inverse-on-surface":"#f8efe5", "outline-variant":"#d1c5b2" },
+      spacing: { "margin-desktop":"80px", "margin-mobile":"20px", "container-max":"1000px" },
+      fontFamily: { "display-lg":["Playfair Display"], button:["Montserrat"], "body-md":["Montserrat"] },
+      fontSize: { button:["14px",{lineHeight:"1",letterSpacing:"0.15em",fontWeight:"500"}] }
+    }}
+  }
+</script>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+
+<nav class="w-full bg-background border-b border-outline-variant">
+  <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-6 w-full max-w-container-max mx-auto">
+    <span class="font-display-lg text-2xl text-primary tracking-widest"><a href="index.html">VALCOSMETICS</a></span>
+    <div class="hidden md:flex space-x-8">
+      <a class="font-button text-button uppercase tracking-[0.15em] text-secondary hover:text-primary" href="index.html">Accueil</a>
+      <a class="font-button text-button uppercase tracking-[0.15em] text-secondary hover:text-primary" href="produits.html">Produits</a>
+      <a class="font-button text-button uppercase tracking-[0.15em] text-secondary hover:text-primary" href="propos.html">À propos</a>
+      <a class="font-button text-button uppercase tracking-[0.15em] text-primary" href="contact.html">Contact</a>
+      <a class="font-button text-button uppercase tracking-[0.15em] text-secondary hover:text-primary" href="admin.html">Admin</a>
+    </div>
+  </div>
+</nav>
+
+<section class="max-w-container-max mx-auto px-margin-mobile py-24 text-center">
+  <h1 class="font-display-lg text-4xl md:text-5xl mb-6">Parlons Beauté</h1>
+  <p class="text-on-surface-variant max-w-lg mx-auto mb-16">
+    Une question sur un produit, une commande ou un partenariat ? Contactez-nous directement via nos réseaux, nous répondons avec plaisir.
+  </p>
+
+  <div class="grid sm:grid-cols-3 gap-8">
+    <a id="contact-whatsapp" class="group border border-outline-variant p-10 hover:border-primary transition-colors">
+      <span class="material-symbols-outlined text-primary text-4xl mb-4 block">contact_phone</span>
+      <p class="font-medium mb-1">WhatsApp</p>
+      <p class="text-sm text-on-surface-variant">Enregistrer notre contact</p>
+    </a>
+    <a id="contact-facebook" target="_blank" class="group border border-outline-variant p-10 hover:border-primary transition-colors">
+      <span class="material-symbols-outlined text-primary text-4xl mb-4 block">public</span>
+      <p class="font-medium mb-1">Facebook</p>
+      <p class="text-sm text-on-surface-variant">Suivez notre actualité</p>
+    </a>
+    <a id="contact-instagram" target="_blank" class="group border border-outline-variant p-10 hover:border-primary transition-colors">
+      <span class="material-symbols-outlined text-primary text-4xl mb-4 block">photo_camera</span>
+      <p class="font-medium mb-1">Instagram</p>
+      <p class="text-sm text-on-surface-variant">Notre univers en images</p>
+    </a>
+  </div>
+</section>
+
+<footer class="bg-inverse-surface text-inverse-on-surface py-16 px-margin-mobile text-center">
+  <span class="font-display-lg text-2xl text-primary-fixed-dim tracking-widest">VALCOSMETICS</span>
+  <p class="font-body-sm text-xs mt-6">© 2026 VAL Cosmetics. L'art de l'éclat.</p><br>
+  <P>contact: 243 821593018</P>
+</footer>
+
+<script src="supabase-client.js"></script>
+<script>
+  const waLink = document.getElementById('contact-whatsapp');
+  waLink.href = VAL_SOCIAL.vcard;
+  waLink.setAttribute('download', 'VAL-Cosmetics.vcf');
+  document.getElementById('contact-facebook').href = VAL_SOCIAL.facebook;
+  document.getElementById('contact-facebook').target = '_blank';
+  document.getElementById('contact-instagram').href = VAL_SOCIAL.instagram;
+  document.getElementById('contact-instagram').target = '_blank';
+</script>
+</body>
+</html>

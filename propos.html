@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="icon" href="logo.jpeg"/>
+<title>À propos | VAL Cosmetics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300; }</style>
+<script id="tailwind-config">
+  tailwind.config = {
+    theme: { extend: {
+      colors: { background:"#fff8f2", primary:"#795902", "primary-container":"#c9a24b", "primary-fixed-dim":"#ebc166", "on-surface":"#1f1b15", "on-surface-variant":"#4e4637", "surface-container-low":"#fbf2e8", "inverse-surface":"#343029", "inverse-on-surface":"#f8efe5", "outline-variant":"#d1c5b2" },
+      spacing: { "margin-desktop":"80px", "margin-mobile":"20px", "container-max":"1200px" },
+      fontFamily: { "display-lg":["Playfair Display"], "headline-md":["Playfair Display"], button:["Montserrat"], "body-md":["Montserrat"], "label-sm":["Montserrat"] },
+      fontSize: { button:["14px",{lineHeight:"1",letterSpacing:"0.15em",fontWeight:"500"}], "label-sm":["12px",{lineHeight:"1.2",letterSpacing:"0.1em",fontWeight:"600"}], "headline-md":["32px",{lineHeight:"1.3"}] }
+    }}
+  }
+</script>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+
+<nav class="w-full bg-background border-b border-outline-variant">
+  <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-6 w-full max-w-container-max mx-auto">
+    <span class="font-display-lg text-2xl text-primary tracking-widest"><a href="index.html">VALCOSMETICS</a></span>
+    <div class="hidden md:flex space-x-8">
+      <a class="font-button text-button uppercase tracking-[0.15em] text-secondary hover:text-primary" href="index.html">Accueil</a>
+      <a class="font-button text-button uppercase tracking-[0.15em] text-secondary hover:text-primary" href="produits.html">Produits</a>
+      <a class="font-button text-button uppercase tracking-[0.15em] text-primary" href="propos.html">À propos</a>
+      <a class="font-button text-button uppercase tracking-[0.15em] text-secondary hover:text-primary" href="contact.html">Contact</a>
+      <a class="font-button text-button uppercase tracking-[0.15em] text-secondary hover:text-primary" href="admin.html">Admin</a>
+    </div>
+  </div>
+</nav>
+
+<section class="text-center py-24 px-margin-mobile max-w-2xl mx-auto">
+  <div class="flex justify-center mb-8">
+    <div class="w-20 h-20 rounded-full border border-primary/40 flex items-center justify-center">
+      <span class="material-symbols-outlined text-primary text-3xl">spa</span>
+    </div>
+  </div>
+  <h1 class="font-display-lg text-4xl md:text-5xl mb-6">L'Aura de la <em class="text-primary not-italic font-serif italic">Féminité</em></h1>
+  <p class="font-body-md text-on-surface-variant">
+    Chez VAL Cosmetics, nous croyons que la beauté n'est pas une routine, mais un rituel sacré. Une célébration quotidienne de l'élégance et de la puissance intérieure.
+  </p>
+</section>
+
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid md:grid-cols-2 gap-16 items-center pb-24">
+  <img class="w-full aspect-[4/3] object-cover" alt="Texture crème dorée VAL Cosmetics" src="WhatsApp Image 2026-07-05 at 22.39.00.jpeg"/>
+  <div>
+    <p class="font-label-sm text-label-sm uppercase text-primary mb-3">Notre Vision</p>
+    <h2 class="font-display-lg text-3xl mb-4">L'Art de l'Éclat Personnel</h2>
+    <p class="text-on-surface-variant mb-6">
+      Née d'une quête d'excellence, VAL Cosmetics fusionne la science dermatologique de pointe avec la poésie des textures sensorielles. Chaque produit est conçu comme une pièce de haute joaillerie pour votre peau.
+    </p>
+    <p class="font-medium text-primary mb-2">Féminité Empowered</p>
+    <p class="text-on-surface-variant mb-8">
+      Nous célébrons une femme sûre d'elle, qui trouve sa force dans la douceur. Nos formules sont sans compromis : propres, puissantes et précieuses.
+    </p>
+    <a class="inline-block bg-inverse-surface text-inverse-on-surface font-button text-button uppercase tracking-[0.15em] px-8 py-4 hover:bg-primary transition-colors" href="produits.html">Découvrir la collection</a>
+  </div>
+</section>
+
+<section class="bg-surface-container-low py-20 px-margin-mobile grid md:grid-cols-3 gap-12 text-center">
+  <div>
+    <span class="material-symbols-outlined text-primary text-3xl mb-4 block">auto_awesome</span>
+    <h3 class="font-display-lg text-xl mb-2">Ingrédients Nobles</h3>
+    <p class="text-sm text-on-surface-variant">Sélectionnés avec rigueur pour leur pureté et leur efficacité rare à travers le monde.</p>
+  </div>
+  <div>
+    <span class="material-symbols-outlined text-primary text-3xl mb-4 block">eco</span>
+    <h3 class="font-display-lg text-xl mb-2">Éthique Durable</h3>
+    <p class="text-sm text-on-surface-variant">Un luxe conscient qui respecte la terre autant que votre beauté naturelle.</p>
+  </div>
+  <div>
+    <span class="material-symbols-outlined text-primary text-3xl mb-4 block">diamond</span>
+    <h3 class="font-display-lg text-xl mb-2">Expérience Unique</h3>
+    <p class="text-sm text-on-surface-variant">Une texture, un parfum, une sensation : chaque détail est une invitation au voyage.</p>
+  </div>
+</section>
+
+<section class="py-24 px-margin-mobile text-center max-w-2xl mx-auto">
+  <p class="text-primary text-4xl mb-4">"</p>
+  <p class="font-display-lg italic text-2xl mb-4">La beauté n'est pas un masque, c'est une lumière que l'on cultive avec soin et élégance.</p>
+  <p class="text-xs uppercase tracking-widest text-on-surface-variant">L'esprit VAL</p>
+</section>
+
+<footer class="bg-inverse-surface text-inverse-on-surface py-16 px-margin-mobile text-center">
+  <span class="font-display-lg text-2xl text-primary-fixed-dim tracking-widest">VALCOSMETICS</span>
+  <p class="font-body-sm text-label-sm mt-6">© 2026 VAL Cosmetics. L'art de l'éclat.</p><br>
+  <P>+243 821593018</P>
+</footer>
+
+</body>
+</html>
